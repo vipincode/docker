@@ -31,4 +31,47 @@ root@d1859157eb86:~#
 - `pts` is short for pseudo terminal - `pts/0` means first terminal window, so i open other terminal window and start this container and then execute the same command we see `pts/1`
 - so in this `pts/0` column we can see which terminal the user is logged into
 - now this ` 00:00:00` time is amount of `CPU` time each process consume. So both this process are very light weight and not taking much of cpu time
-- but some you notice your is slow, thats bcs some process taking so much CPU time.In that you have to kill that process
+
+---
+
+**but some you notice your is slow, thats bcs some process taking so much CPU time.In that you have to kill that process lets see how this work**
+
+- lets first create a process and put it in background
+  > sleep 3
+  - now prompt is sleep 3 second, and then wakes up
+  - now lets put is in background
+    > sleep 3 &
+  ```terminal
+  root@d1859157eb86:~# sleep 3 &
+  [1] 21
+  root@d1859157eb86:~#
+  ```
+- Now this is in background, and lets execute another command
+  > sleep 100 & [put it also in background]
+- Now lets run `ps` here we can see sleep command
+
+```terminal
+root@d1859157eb86:~# ps
+  PID TTY          TIME CMD
+    1 pts/0    00:00:00 bash
+   22 pts/0    00:00:00 sleep
+   23 pts/0    00:00:00 ps
+root@d1859157eb86:~#
+```
+
+- As we can see `00:00:00` this command not taking much of CPU time so its light process, lets kill this
+- For killing process we use `kill` command, and assign process id [PID]
+  > kill 22
+
+```terminal
+root@d1859157eb86:~# kill 22
+bash: kill: (22) - No such process
+[2]+  Done                    sleep 100
+root@d1859157eb86:~# ps
+  PID TTY          TIME CMD
+    1 pts/0    00:00:00 bash
+   24 pts/0    00:00:00 ps
+root@d1859157eb86:~#
+```
+
+- Process id 22 is gone. means process is terminated.
